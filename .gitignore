@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.csv
+verification.json
+*.log
+*.pow
+state.json
+rules.json
+operation.lock

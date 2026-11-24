@@ -1,0 +1,131 @@
+/* Stella design tokens.
+   Two layers. Primitives (--grey-*, --gold-*, hue names) are raw values named by CIE L* lightness, so a step's
+   name says how bright it is. Semantic tokens (--stella-*, --state-*, --shadow-*) say what a colour MEANS.
+   style.css and the JS should use semantic tokens; primitives appear there only for one-off surface tones.
+   A venue or high-contrast mode should only need to remap the semantic layer.
+
+   Colour meanings (one meaning per hue):
+     gold        fixture data (pool, sampler regions, fixture ports/wires) and the Stella brand mark
+     salmon      LIVE: Art-Net armed and sending. Nothing else may use it.
+     orange      warning: needs attention, nothing is broken yet
+     red         error, and destructive actions
+     blue        video signal        violet  control signal        green  DMX channel signal
+     magenta     audio signal
+     group labels  identity colours of Fixture Groups (teal, rose, lime, orchid, sky, periwinkle). Darker and less
+                 saturated than the signal hues, and shown only on group swatches: the Light Pool grip of a grouped
+                 light, a group card's dot and stacked edge, the breadcrumb, the label picker. Never on ports,
+                 wires, values or state. Lights outside a group keep the neutral grip.
+     neutral     everything interactive: selection, focus, primary buttons, toggles, transport, "Connected"
+   "Connected" means only that a route exists, so it is neutral, never gold or salmon. */
+:root{
+  /* --- Primitives: neutral ramp (cool graphite), named by L* --- */
+  --grey-03:#0b0c0d;--grey-05:#101214;--grey-08:#15171a;--grey-10:#181b1e;--grey-12:#1d2023;
+  --grey-15:#22262a;--grey-18:#292d30;--grey-21:#2f3337;--grey-24:#353b3e;--grey-28:#3e4347;
+  --grey-32:#474d51;--grey-37:#50575c;--grey-42:#5d6469;--grey-49:#6c757b;--grey-60:#8b9399;
+  --grey-70:#a7adb1;--grey-76:#b6bcc0;--grey-84:#cdd2d5;--grey-91:#e2e6e8;--grey-94:#eceeef;
+
+  /* --- Primitives: gold ramp (fixture data and brand) --- */
+  --gold-14:#1d1a10;--gold-22:#3a3424;--gold-29:#49443a;--gold-48:#8a7444;
+  --gold-73:#d7af5a;--gold-80:#e7c268;--gold-86:#f0d497;--gold-92:#f3e6c2;
+
+  /* --- Primitives: hues --- */
+  --blue-75:#7dc4ed;--violet-70:#b4a3e8;--green-80:#93d3a2;--magenta-70:#e48ad2;
+  --salmon-72:#e99b94;--salmon-ink:#1d0f0d;--orange-72:#f29a52;--red-60:#ec6a62;
+  --copper-60:#b88165;--copper-80:#f2b493;--ice-76:#9fbfc3;--ice-91:#d5e9e9;
+  /* Group label primitives: OKLCH L 0.72, C 0.105, one step of hue apart; >=4.9:1 against every pool/card surface. */
+  --label-teal:#42bab3;--label-rose:#dc889c;--label-lime:#91b168;--label-orchid:#c68dc9;--label-sky:#63ade0;--label-periwinkle:#9a9ce5;
+
+  /* --- Surfaces --- */
+  --stella-well:var(--grey-03);        /* media wells: viewers, video previews */
+  --stella-bg:var(--grey-05);
+  --stella-surface:var(--grey-10);
+  --stella-raised:var(--grey-15);
+  --stella-overlay:#17191bdb;          /* panels floating over video */
+  --stella-overlay-strong:#0b0c0de6;   /* readouts floating over video */
+  --stella-scrim:#000a;                /* behind modal dialogs */
+
+  /* --- Lines --- */
+  --stella-border:var(--grey-24);        /* dividers between regions (decorative) */
+  --stella-border-strong:var(--grey-49); /* edges that identify a control: inputs, selects, switches. >=3:1 */
+  --stella-border-disabled:var(--grey-37);
+
+  /* --- Text (all >= 4.5:1 on raised) --- */
+  --stella-text:var(--grey-94);
+  --stella-text-control:var(--grey-91); /* labels and controls on raised surfaces */
+  --stella-text-2:var(--grey-84);
+  --stella-muted:var(--grey-70);
+  --stella-faint:var(--grey-60);
+  --stella-text-disabled:var(--grey-60); /* disabled = this colour + dashed edge; never opacity alone */
+
+  /* --- Interaction (neutral, so it never reads as a state) --- */
+  --stella-select:var(--grey-84);        /* selected node, light, layer, tool; solid edge at offset 0 */
+  --stella-select-fill:var(--grey-21);
+  --stella-hover:var(--grey-28);
+  --stella-focus-ring:#fff;              /* keyboard focus; drawn with an offset gap, so it differs from selection */
+  --stella-focus:2px solid var(--stella-focus-ring);
+
+  /* --- Brand --- */
+  --stella-brand:var(--gold-80);         /* the Stella mark; for fixture meaning use --stella-fixture */
+  --stella-brand-dim:var(--gold-73);
+  --stella-on-gold:var(--gold-14);
+
+  /* --- States --- */
+  --state-connected:var(--grey-84);
+  --state-live:var(--salmon-72);
+  --state-live-ink:var(--salmon-ink);
+  --state-warning:var(--orange-72);
+  --state-error:var(--red-60);
+  --state-danger:var(--red-60);
+  --state-blackout:var(--copper-60);
+  --state-blackout-text:var(--copper-80);
+
+  /* --- Signals (each also has a port shape: circle, square, triangle, diamond, capsule) --- */
+  --stella-video:var(--blue-75);
+  --stella-fixture:var(--gold-80);
+  --stella-fixture-hi:var(--gold-92);
+  --stella-control:var(--violet-70);
+  --stella-dmx:var(--green-80);
+  --stella-audio:var(--magenta-70);
+
+  /* Fixture Group labels, in assignment order (settings.label 1..6). */
+  --group-label-1:var(--label-teal);--group-label-2:var(--label-rose);--group-label-3:var(--label-lime);
+  --group-label-4:var(--label-orchid);--group-label-5:var(--label-sky);--group-label-6:var(--label-periwinkle);
+
+  /* --- Surface Mapper handles (projection geometry, not fixture data) --- */
+  --surface-handle:var(--ice-91);
+  --surface-path:var(--ice-76);
+
+  /* --- Elevation --- */
+  --shadow-raised:0 10px 20px #0006;
+  --shadow-float:0 8px 24px #0009;
+  --shadow-lift:0 18px 34px #000b,0 0 0 1px #ffffff14;
+
+  /* --- Spacing: one scale for padding, margins and gaps. Steps below 8 are for inside controls. --- */
+  --space-2xs:2px;--space-xs:4px;--space-s:6px;--space-m:8px;--space-l:12px;--space-xl:16px;--space-2xl:24px;--space-3xl:32px;
+
+  /* --- Control sizes: every button, select, field and segmented control uses one of these heights --- */
+  --control-s:24px;   /* compact: inside nodes, list rows, toolbars over media */
+  --control-m:28px;   /* default */
+  --control-l:32px;   /* prominent: transport, dialog actions */
+  --panel-head:32px;  /* the one header height shared by every shell region */
+  --strip-w:28px;     /* a collapsed side panel */
+  --hairline:1px solid var(--stella-border);   /* region dividers in the shell */
+  --select-width:2px; /* selection outline width */
+
+  /* --- Motion: short and decisive; reduced motion turns transitions off --- */
+  --dur-fast:120ms;--dur-base:160ms;--ease-out:cubic-bezier(.2,.8,.2,1);
+  --dur-hint:4600ms; /* fullscreen hint fades within the existing five-second window */
+
+  /* --- Layers, lowest to highest --- */
+  --z-drag:50;--z-readout:60;--z-menu:9000;--z-tooltip:9500;--z-fullscreen:10000;
+  /* Component-level stacking inside panels and nodes */
+  --z-raised:1;--z-overlay:2;--z-handles:3;--z-controls:4;--z-tools:5;--z-wire-overlay:6;--z-floating:10;
+
+  /* --- Radii: flush shell regions use none --- */
+  --radius-s:2px;--radius-m:4px;--radius-l:6px;--radius-pill:999px;
+
+  /* --- Type --- */
+  /* System UI fonts ship with the host OS; no unbundled face is required. */
+  --font-ui:system-ui,-apple-system,"Segoe UI",sans-serif;
+  --fs-canvas:.75rem;--fs-xs:.75rem;--fs-sm:.8125rem;--fs-md:.875rem;--fs-lg:1rem;--fs-xl:1.125rem;--fs-icon:1.5rem;
+}
